@@ -19,5 +19,10 @@ Here is a brief log of your weekly tasks and accomplishments.
 - When Prakash is available, I will ask him for the main server URL that we'll be using.
 
 ### Day 3
-- **Payload Parsing**: Updated `main.py` to parse the raw JSON payload into a Python dictionary. Added specific event handling to extract pusher names and commit messages for `push` events, and extracted action and title information for `issues` events.
-- **Persistent Event Logging**: Implemented a `log_event` function in `main.py` and configured the webhook receiver to write structured logs to `webhook_events.log`. Log entries include timestamps, event types, and relevant extracted data.
+- **Checklist Compliance & Security**: Added explicit `print` statements for raw headers and body to the terminal for debugging. Ignored the `venv` and `.env` files using a newly created `.gitignore`.
+- **Advanced Payload Parsing**: Extracted parsing logic into a dedicated `parse_event` function. It now captures extended payload details like the `branch` name, individual commit IDs and messages, and `pull_request` metadata.
+- **Robustness**: Wrapped the parser in a `try/except` block to gracefully handle bad payloads (returning an error field) without crashing the server.
+- **JSON Event Storage**: Switched from plain text logging to appending raw JSON objects directly to `events.json` line-by-line. Deleted the old `webhook_events.log` relic.
+- **API Endpoints**: 
+  - Added a `GET /events` route that reads `events.json` and outputs a pretty-printed, easily readable JSON array directly in the browser.
+  - Added a `GET /health` endpoint for quick server status checks.
