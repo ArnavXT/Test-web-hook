@@ -2,7 +2,7 @@
 ## 1. Setup
 mkdir week1-webhook && cd week1-webhook
 
-python -m venv venv && source venv/bin/activate
+python  -m venv venv && source venv/bin/activate
 
 pip install fastapi uvicorn requests python-dotenv
 
