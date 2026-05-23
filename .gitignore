@@ -1,0 +1,4 @@
+week1-webhook/venv/
+week1-webhook/.env
+week1-webhook/__pycache__/
+*.pyc
