@@ -26,3 +26,12 @@ Here is a brief log of your weekly tasks and accomplishments.
 - **API Endpoints**: 
   - Added a `GET /events` route that reads `events.json` and outputs a pretty-printed, easily readable JSON array directly in the browser.
   - Added a `GET /health` endpoint for quick server status checks.
+
+### Day 4
+- **First live GitHub event**: Created a dummy GitHub repository (`webhook-test-repo`) and successfully hooked up the local ngrok tunnel.
+- Pushed a commit to test the webhook and verified that the FastAPI server received, logged, and parsed the real JSON payload properly. Both terminal and GitHub delivery logs confirmed successful transmission.
+
+### Day 7
+- **Code Polish**: Added descriptive comments to `main.py` explaining each section to improve readability for the team.
+- **Documentation**: Wrote a concise `README.md` with instructions on how to install, run, and test the webhook listener locally.
+- Ready to push code with screenshots and demonstrate real-time event capture to the team.

@@ -6,13 +6,21 @@ from datetime import datetime
 from fastapi import FastAPI, Request, HTTPException, Response
 from dotenv import load_dotenv
 
+# Load environment variables from .env file
 load_dotenv()
+
+# Initialize FastAPI application
 app = FastAPI()
 
+# Configuration variables
 SECRET = os.getenv("GITHUB_WEBHOOK_SECRET", "testsecret123")
 EVENTS_FILE = "events.json"
 
 def verify_signature(payload: bytes, sig_header: str) -> bool:
+    """
+    Verifies that the incoming request is actually from GitHub
+    by checking the HMAC-SHA256 signature using our shared secret.
+    """
     if not sig_header:
         return False
     mac = hmac.new(SECRET.encode(), payload, hashlib.sha256)
@@ -20,6 +28,10 @@ def verify_signature(payload: bytes, sig_header: str) -> bool:
     return hmac.compare_digest(expected, sig_header)
 
 def parse_event(event_type: str, body: dict) -> dict:
+    """
+    Extracts relevant information from the raw GitHub payload based on event type.
+    Normalizes the data for downstream use.
+    """
     base = {
         "event_type": event_type,
         "timestamp": datetime.utcnow().isoformat()
@@ -48,10 +60,15 @@ def parse_event(event_type: str, body: dict) -> dict:
             "pr_number": pr.get("number"),
         }
     else:
+        # Fallback for unsupported event types
         return {**base, "raw": body}
 
 @app.post("/webhook")
 async def receive_webhook(request: Request):
+    """
+    Main webhook receiver endpoint.
+    Verifies the signature, parses the payload, and saves the event to a file.
+    """
     payload = await request.body()
     
     # Strictly following the checklist: Print headers and raw body
@@ -71,6 +88,7 @@ async def receive_webhook(request: Request):
         body = json.loads(payload)
         event = parse_event(event_type, body)
     except Exception as e:
+        # Gracefully handle bad payloads
         event = {
             "error": str(e), 
             "event_type": event_type,
@@ -86,6 +104,9 @@ async def receive_webhook(request: Request):
 
 @app.get("/events")
 def get_events():
+    """
+    Returns all stored events as a pretty-printed JSON array.
+    """
     events = []
     try:
         with open(EVENTS_FILE) as f:
@@ -98,4 +119,7 @@ def get_events():
 
 @app.get("/health")
 def health():
+    """
+    Simple health check endpoint.
+    """
     return {"status": "alive"}
