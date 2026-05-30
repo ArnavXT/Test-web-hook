@@ -1,6 +1,6 @@
 # Week 1 Webhook Listener
 
-## How to Install
+## How to Install 
 1. `python -m venv venv && source venv/bin/activate` (Windows: `venv\Scripts\activate`)
 2. `pip install fastapi uvicorn[standard] requests python-dotenv`
 
